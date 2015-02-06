@@ -1,0 +1,10 @@
+#Environment Variables
+PrimaryRegion: us-west-2
+DRRegion: us-west-1
+DevOpsPrimaryBucket: rw-devops
+DevOpsDRBucket: rw-dr-devops
+KeyPair: DevelopmentKey
+OpenVpnAmi: ami-57b6ee67
+OpenVpnInstanceType: t2.small
+JenkinsAmi: ami-05b6ee35
+JenkinsInstanceType: t2.small

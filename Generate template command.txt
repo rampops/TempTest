@@ -1,0 +1,1 @@
+cfn_py_generate template.py development.json -o mappings/development.yaml

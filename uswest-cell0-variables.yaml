@@ -1,0 +1,71 @@
+# StackRole: TestVpc
+VpcCidr: 10.0.0.0/16
+Env: DEV
+DnsHostNames: false
+# Subnet sizes
+# For now public and ELB are restricted to half the size
+# of the private subnet
+SubnetSize: 8
+
+# subnets that have a IGW attached in routetable for internet access [name, 3rd octet]
+#PublicSubnets:
+#  - NatSubnet
+PublicSubnets:
+  - ['PublicSubnet',10]
+  - ['PublicDHCPSubnet',20]
+
+# subnets that have a NAT attached in routetable [name, 3rd octet]
+#PrivateSubnets:
+#  - ADSubnet
+#  - AdminSubnet
+#  - DeepnetSubnet
+#  - FilerSubnet
+PrivateSubnets:
+  - ['PrivateSubnet',40]
+  - ['PrivateDHCPSubnet',50]
+
+Admin: True
+AdminInstanceType: t2.medium
+AdminKeyPair: DevelopmentKey
+AdminAMI: ami-891a45b9
+AdminSecurityGroup: AdminSg
+
+Nat: True
+NatInstanceType: t2.micro
+NatKeyPair: DevelopmentKey
+
+AD: True
+ADInstanceType: t2.medium
+ADKeyPair: DevelopmentKey
+ADAMI: ami-891a45b9
+ADSecurityGroup: ADSg
+
+Deepnet: True
+DeepnetInstanceType: t2.medium
+DeepnetKeyPair: DevelopmentKey
+DeepnetAMI: ami-891a45b9
+DeepnetSecurityGroup: FilerSg
+
+Filer: True
+FilerAMI: ami-891a45b9
+FilerInstanceType: t2.medium
+FilerKeyPair: DevelopmentKey
+FilerSecurityGroup: FilerSg
+
+# Name, followed by rules
+SecurityGroups:
+  - ['ADSg','Active Directory Security Group', ['tcp',0,65535,10.0.0.0/8],['udp',0,65535,10.0.0.0/8]]
+  - ['AdminSg','Admin Security Group', ['tcp',0,65535,10.0.0.0/8],['udp',0,65535,10.0.0.0/8],['tcp',3389,3389,0.0.0.0/0]]
+  - ['FilerSg','Filer Security Group', ['tcp',0,65535,10.0.0.0/8],['udp',0,65535,10.0.0.0/8]]
+  - ['DeepnetSg','Deepnet Token Security Group', ['tcp',0,65535,10.0.0.0/8],['udp',0,65535,10.0.0.0/8]]
+  - ['NatSg','NAT Security Group', ['tcp',80,80,10.0.0.0/16],['tcp',443,443,10.0.0.0/16],['tcp',22,22,10.0.0.0/16]]
+
+# Resources for defining the VPN connection
+CreateTunnel: no
+BgpAsn: 65000
+CustomerGatewayIp: 38.122.6.70
+
+VpcPeering: False
+PeeringCidr: 10.60.0.0/16
+
+S3Bucket: rw-devops
